@@ -1,0 +1,40 @@
+<ul class='forms'>
+  <% @forms.each do |form| %>
+    <li id='form_<%= form.id %>'>
+      <%= form.title %> |
+      <%= link_to 'delete', form_url(form.id),
+                  :method => :delete,
+                  :confirm => 'do you really want to remove this?' %> |
+      <%= link_to 'view', form_url(form.id) %> |
+      <%= link_to 'edit', edit_form_url(form.id) %> |
+      <%= link_to 'report', form_report_url(form.id) %>
+
+      <ul>
+        <% form.form_group_assignments.each do |assignment| %>
+          <li>
+            <%= assignment.form_group.label %> |
+            <%= link_to 'delete', form_group_assignment_url(assignment.id),
+                                  :method => :delete,
+                                  :confirm => 'Do you really want to remove this?' %>
+          </li>
+        <% end %>
+      </ul>
+
+      <% form_for FormGroupAssignment.new do |f| %>
+        <%= f.select :form_group_id, @groups.collect{|fg| [fg.label, fg.id]} %>
+        <%= f.hidden_field :form_id, :value => form.id %>
+        <%= f.submit 'Assign' %>
+      <% end %>
+    </li>
+  <% end %>
+</ul>
+
+<div class='form_item'>
+  <% form_for @form do |f| %>
+    <%= f.label :title %><br/>
+    <%= f.text_field :title %><br/>
+    <%= f.label :description %><br/>
+    <%= f.text_area :description, :rows => 10, :cols => 30 %><br/>
+    <%= f.submit 'Save' %>
+  <% end %>
+</div>

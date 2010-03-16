@@ -1,0 +1,171 @@
+<html>
+<head>
+  <title>Talent review form</title>
+
+  <style type="text/css">
+    h1, h2, h3, h4, h4, h5, h6 {margin: 0; padding: 0;}
+
+    .form_elements_list {
+      border: 1px solid #ccc;
+      width: 360px;
+      padding: 5px;
+      height: 100px;
+      overflow-y: scroll;
+    }
+
+    body {
+      background: #E6EDEf url(http://collab.tasawr.com/public/assets/themes/goCollab/images/layout/bg_page.png) repeat-x;
+      font-family: Arial,sans-serif;
+      margin: 0;
+    }
+
+    .form {
+      background:  #E4ECEF;
+      width: 600px;
+      margin: 0 auto;
+      border: 6px solid #fff;
+      padding: 10px;
+    }
+
+    .form h1 {
+      font-size: 23px;
+    }
+
+    .form p {
+      font-size: 80%;
+      line-height: 20px;
+    }
+
+    .form .group {
+      background: red;
+      margin-top: 20px;
+      background: #fff;
+      padding: 10px;
+      border: 1px solid #ccc;
+    }
+
+    .form .group .topics .topic {
+      margin: 10px 10px 30px 0px;
+    }
+
+    .form .group .topics .topic label {
+      font-weight: bolder;
+    }
+
+    .form .group .topics .topic select {
+      margin-top: 10px;
+    }
+
+    .form .group .topics .topic textarea {
+      width: 100%;
+    }
+
+    .form .group .action input {
+      font-size: 20px;
+      float: right;
+      margin-right: 10px;
+    }
+
+    .menu {
+      background: #E4ECEF;
+      padding: 30px 10px 30px 10px;
+      text-align: right;
+    }
+
+    .menu img {
+      width: 160px;
+      float: left;
+      margin-left: 20px;
+    }
+
+    .menu a {
+      color: #000;
+      padding: 10px;
+      text-decoration: none;
+    }
+
+    .menu a:hover {
+      background: lightYellow;  
+    }
+
+    .fieldWithErrors {
+      display: inline;
+    }
+
+    .fieldWithErrors input {
+      border: 1px solid red;
+    }
+
+    .formError {
+      background: lightYellow;
+      display: inline;
+      color: red;
+    }
+
+    .formReport {
+      
+    }
+
+    .formDataInRows .formData {
+      margin: 10px 10px 20px 10px;
+    }
+
+    .formData .formDataHeader {
+      background: #fff;
+      padding: 5px;
+      border-bottom: 2px solid #ccc;
+      font-size: 90%;
+      font-weight: bold;
+      margin-bottom: 20px;
+      clear: both;
+    }
+
+    .formData .row .label {
+      font-weight: bold;
+      font-style: italic;
+      display: block;
+    }
+
+    .formData .row .value {
+      display: block;
+      font-size: 90%;
+    }
+
+    .formData .row {
+      margin: 5px;  
+      width: 150px;
+      float:left;
+      height: 100px;
+      border: 1px solid #ccc;
+      padding: 5px;
+      background: lightYellow;
+    }
+
+    .formData .totalPoints {
+      clear: both;
+      margin: 5px 5px 5px 5px;
+      padding: 10px 10px 10px 0px;
+    }
+  </style>
+</head>
+<body>
+<div class='container'>
+  <div class='menu'>
+    <img src='http://collab.tasawr.com/public/assets/themes/goCollab/images/layout/logo.gif' alt='Tasawr Interactive'/>
+    <%= link_to 'Fields', form_elements_url %>
+    <%= link_to 'Field Groups', form_groups_url %> 
+    <%= link_to 'Forms', forms_url %>
+  </div>
+  <div class='content' style='padding: 20px;'>
+    <% message = flash[:success] || flash[:notice] %>
+    <% if message && !message.empty? %>
+      <div class='notification'>
+        <%= message %>
+      </div>
+    <% end %>
+    <%= yield %>
+  </div>
+
+</div>
+</body>
+</html>

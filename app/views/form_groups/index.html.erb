@@ -1,0 +1,52 @@
+<ul class='form_groups' style="margin: 0; list-style-type:none;">
+  <% @form_groups.each do |form_group| %>
+    <li class='form_group_item' id='form_group_<%= form_group.id %>'>
+      <b><%= form_group.label %></b>
+      <%= link_to 'delete', form_group_url(form_group.id),
+                  :method => :delete,
+                  :confirm => 'Do you want to remove this group?' %> |
+      <%= link_to 'edit', edit_form_group_url(form_group.id) %>
+
+      <ul class='form_group_elements' style="margin: 0; list-style-type: none;">
+        <% form_group.group_element_assignments.each do |assignment| %>
+          <li style="padding: 10px;">
+            <%= assignment.form_element.label if assignment.form_element %> |
+            <%= link_to 'delete', group_element_assignment_url(assignment.id),
+                        :method => :delete,
+                        :confirm => 'Do you really want to remove this assignment?' %>
+          </li>
+        <% end %>
+
+        <li>
+          <div class='form_group_element_assignment'>
+            <%= error_messages_for :group_element_assignment %>
+            <% form_for GroupElementAssignment.new do |f| %>
+              <div class='form_elements_list'>
+                <% @form_elements.each do |fe| %>
+                  <input type='checkbox' id='form_element_<%= fe.id %>'
+                         value="<%= fe.id %>" name='form_element_ids[]'/>
+                  <label for='form_element_<%= fe.id %>'><%= fe.label %></label><br/>
+                <% end %>
+              </div>
+              <%= f.hidden_field :form_group_id, :value => form_group.id %>
+              <%= f.submit 'assign' %>
+            <% end %>
+          </div>
+        </li>
+      </ul>
+
+
+    </li>
+  <% end %>
+</ul>
+
+<div class='form_group'>
+  <h4>Add new form group</h4>
+  <% form_for @form_group do |f| %>
+    <%= f.label :label %><br/>
+    <%= f.text_field :label %><br/>
+    <%= f.label :description %><br/>
+    <%= f.text_area :description, :rows => 10, :cols => 30 %><br/>
+    <%= f.submit 'Save' %>
+  <% end %>
+</div>

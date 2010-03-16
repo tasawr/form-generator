@@ -1,0 +1,15 @@
+# Read about fixtures at http://ar.rubyonrails.org/classes/Fixtures.html
+
+one:
+  form_id: 1
+  form_element_id: 1
+  int_value: 1
+  slim_value: MyString
+  fat_value: MyText
+
+two:
+  form_id: 1
+  form_element_id: 1
+  int_value: 1
+  slim_value: MyString
+  fat_value: MyText

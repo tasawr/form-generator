@@ -1,0 +1,25 @@
+
+
+<ul class='existing_form_elements'>
+  <% @form_elements.each do |form_element| %>
+    <li class='form_element_item'>
+      #<%= form_element.id %>, <%= form_element.label %>,
+      <%= form_element.required? ? 'required' : 'not required' %> |
+      <%= link_to 'Delete', form_element_url(form_element.id),
+                  :method => :delete,
+                  :confirm => 'Do you really want to remove this form element?' %>
+      | <%= link_to 'Edit', edit_form_element_url(form_element.id) %>
+
+    </li>
+  <% end %>
+</ul>
+
+<div class='form_element'>
+  <% form_for @form_element do |f| %>
+    <%= f.select :field_type, @field_types %>
+    <%= f.text_field :label %>
+    <%= f.check_box :required, :checked => true %>
+    <%= f.label :required, 'Required?' %> |
+    <%= f.submit 'Add' %>
+  <% end %>
+</div>

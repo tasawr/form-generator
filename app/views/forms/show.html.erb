@@ -1,0 +1,120 @@
+<script type="text/javascript">
+  var maxGroups = 0;
+  var currentGroup = 0;
+
+  function showNextGroup(pIndex) {
+    var currentGroup = document.getElementById('group_' + pIndex);
+    var nextGroup = document.getElementById('group_' + (pIndex + 1));
+
+    if (nextGroup) {
+      currentGroup.style.display = 'none';
+      nextGroup.style.display = 'block';
+    }
+  }
+
+  function showPreviousGroup(pIndex) {
+    var currentGroup = document.getElementById('group_' + pIndex);
+    var prevGroup = document.getElementById('group_' + (pIndex - 1));
+
+    if (prevGroup) {
+      currentGroup.style.display = 'none';
+      prevGroup.style.display = 'block';
+    }
+  }
+</script>
+
+<div class='form'>
+  <h1><%= @form.title %></h1>
+
+  <% if @form.description && !@form.description.blank? %>
+    <p>
+      <%= simple_format @form.description %>
+    </p>
+  <% end %>
+
+  <% form_for (@form_data_set || FormDataSet.new) do |f| %>
+    <div class='group'>
+      <%= f.hidden_field :form_id, :value => @form.id %>
+      <%= f.label :email, 'Your email address' %>
+      <%= f.text_field :email %>
+      <%= f.error_message_on :email %>
+    </div>
+    
+    <%
+       first_group = @form.form_groups.first
+       last_group = @form.form_groups.last
+    %>
+    <script type="text/javascript" defer="defer">
+      maxGroups = <%= @form.form_groups.length %>;
+      currentGroup = 1;
+    </script>
+
+    <% field_count = 0 %>
+
+    <% @form.form_groups.each_with_index do |group, index| %>
+
+      <div class='group' id='group_<%= index + 1 %>'
+           style="display: <%= first_group != group ? 'none' : 'block' %>">
+        <h4><%= group.label %></h4>
+        <% if group.label && !group.label.blank? %>
+          <p><%= group.description %></p>
+        <% end %>
+
+        <div class='topics'>
+          <% group.form_elements.each do |element| %>
+            <% field_count += 1 %>
+
+            <div class='topic'>
+              <label for='<%= field_label_id = 'label_' + field_count.to_s %>'>
+                <%= element.label %>
+                <%= element.required ? '(*)' : '' %>
+              </label>
+              <div class='answer'>
+                <% field_ref = "#{element.id}_#{element.id}" %>
+
+                <% if element.field_type.to_s == 'scale' %>
+                  <select name='fields[][int_<%= field_ref %>]' id='<%= field_label_id %>'>
+                    <%= options_for_select(@ratings, (@fields_data || [{}]).first["int_#{field_ref}"].to_i) %>
+                  </select>
+                  <% if @form_data_set && @form_data_set.error_on_field("int_#{field_ref}") %>
+                    <div class='formError'>
+                      <%= @form_data_set.error_on_field("int_#{field_ref}") %>
+                    </div>
+                  <% end %>
+                <% elsif element.field_type.to_s == 'text' %>
+                  <textarea name='fields[][text_<%= field_ref %>]'
+                            rows='5'
+                            id='<%= field_label_id %>'><%= (@fields_data || [{}]).first["text_#{field_ref}"] %></textarea>
+                  <% if @form_data_set && @form_data_set.error_on_field("text_#{field_ref}")%>
+                    <div class='formError'>
+                      <%= @form_data_set.error_on_field("text_#{field_ref}") %>
+                    </div>
+                  <% end %>
+                <% end %>                           
+              </div>
+
+            </div>
+          <% end %>
+        </div>
+
+        <div class='action'>
+          <% if group == first_group %>
+            <input type='button' value='Next &gt;'
+                   onclick="showNextGroup(<%= index + 1 %>)"/>
+          <% elsif group == last_group %>
+            <%= f.submit 'Submit' %>
+            <input type='button' value='&lt; Previous'
+                   onclick="showPreviousGroup(<%= index + 1 %>)"/>
+          <% else %>
+            <input type='button' value='Next &gt;'
+                   onclick="showNextGroup(<%= index + 1 %>)"/>
+            <input type='button' value='&lt; Previous'
+                   onclick="showPreviousGroup(<%= index + 1 %>)"/>
+          <% end %>
+        </div>
+        <br clear="all"/>
+      </div>
+    <% end %>
+
+  <% end %>
+</div>

@@ -1,0 +1,9 @@
+<div class='form_element'>
+  <% form_for @form_element do |f| %>
+    <%= f.select :field_type, @field_types %>
+    <%= f.text_field :label %>
+    <%= f.check_box :required, :checked => true %>
+    <%= f.label :required, 'Required?' %> |
+    <%= f.submit 'Update' %>
+  <% end %>
+</div>

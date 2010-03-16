@@ -1,0 +1,64 @@
+<div class='formReport'>
+  <h1><%= @form.title %></h1>
+  <p><%= @form.description %></p>
+
+  <div class='formDataInRows'>
+    <% if @form.form_data_sets.empty? %>
+      <div class='emptyData'>
+        None one yet submitted anything! | <%= link_to 'View form', form_url(@form.id) %>
+      </div>
+    <% end %>
+
+    <% @form.form_data_sets.each do |form_data_set| %>
+      <div class='formData'>
+        <div class='formDataHeader'>
+          Email - <%= form_data_set.email %> | Submission date - <%= form_data_set.created_at %>
+        </div>
+        <% @grouped_elements.each do |group, elements| %>
+          <h4><%= group.label %></h4>
+
+          <%
+             datum = form_data_set.form_datas.by_form_element_ids(elements.collect{|e| e.id})
+          %>
+          <div class='rows'>
+            <% datum.each do |form_data| %>
+              <% value = form_data.value(form_data.form_element.field_type) %>
+              <div class='row' style='background: <%= FormData::COLORS[value - 1] if form_data.form_element.field_type == FormElement::TYPE_SCALE %>'>
+                <span class='label'>
+                  <%= form_data.form_element.label %>:
+                </span>
+                <span class='value'>
+                  <% if value == 1 %>
+                    Not Satisfactory
+                  <% elsif value == 2 %>
+                    Met Expectations
+                  <% elsif value == 3 %>
+                    Good Performance
+                  <% elsif value == 4 %>
+                    Outstanding Performance
+                  <% else %>
+                    <%= value %>
+                  <% end %>
+                </span>
+              </div>
+            <% end %>
+
+            <%
+               total_questions = elements.collect{|e| e if e.field_type == FormElement::TYPE_SCALE}.compact.length
+               total_points = 0
+               datum.each do |data|
+                 if data.form_element.field_type == FormElement::TYPE_SCALE
+                  total_points += data.value(data.form_element.field_type).to_i
+                 end
+               end
+               average_points = (total_points.to_f / total_questions.to_f).to_f
+            %>
+            <div class='totalPoints'>
+              Total points: <%= total_points %> | Average points: <%= average_points %> 
+            </div>
+          </div>
+        <% end %>
+      </div>
+    <% end %>
+  </div>
+</div>
