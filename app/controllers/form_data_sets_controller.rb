@@ -15,7 +15,7 @@ class FormDataSetsController < ApplicationController
       @form = @form_data_set.form
       @ratings = FormDataSet::SCALE_TYPES
       @fields_data = params[:fields]
-      render :action => '../forms/show.html.erb'
+      render :template => 'app/views/forms/show.html.erb'
     end
   end
 
