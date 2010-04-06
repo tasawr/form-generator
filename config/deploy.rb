@@ -1,10 +1,9 @@
 require File.join(File.dirname(__FILE__), 'other_tasks')
 
 set :application, "form-generator"
-set :repository,  "git://github.com/we4tech/Form-generator.git"
+set :repository,  "git://github.com/tasawr/form-generator"
 
 set :scm, :git
-# Or: `accurev`, `bzr`, `cvs`, `darcs`, `git`, `mercurial`, `perforce`, `subversion` or `none`
 
 set :use_sudo, false
 

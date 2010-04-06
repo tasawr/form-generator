@@ -1,7 +1,7 @@
 <% form_for @form do |f| %>
   <%= f.label :title %><br/>
-  <%= f.text_field :title %><br/>
+  <%= f.text_field :title, :style => 'width: 100%' %><br/>
   <%= f.label :description %><br/>
-  <%= f.text_area :description, :rows => 10, :cols => 30 %><br/>
-  <%= f.submit 'Update' %>
+  <%= f.text_area :description, :style => 'width: 100%; height: 500px;' %><br/>
+  <%= f.submit 'Update' %> | <%= link_to 'Cancel', forms_url %>
 <% end %>
