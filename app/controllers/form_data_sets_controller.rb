@@ -21,7 +21,18 @@ class FormDataSetsController < ApplicationController
 
   def report
     @form = Form.find(params[:id].to_i)
-    @grouped_elements = prepare_grouped_data(@form)
+  end
+
+  def destroy
+    form_data_set = FormDataSet.find(params[:id].to_i)
+    form = form_data_set.form
+    if form_data_set.destroy
+      notify_success :saved, :form_data_set
+    else
+      notify_failure :save, :form_data_set
+    end
+
+    redirect_to form_report_url(form.id)
   end
 
   private

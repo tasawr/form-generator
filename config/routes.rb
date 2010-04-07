@@ -1,5 +1,5 @@
 ActionController::Routing::Routes.draw do |map|
-  map.resources :form_data_sets
+  map.resources :form_data_sets, :collection => {:report => :get}
 
   map.resources :form_datas
 

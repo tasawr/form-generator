@@ -9,7 +9,7 @@ class FormDataSet < ActiveRecord::Base
   attr_accessor :field_errors
 
   belongs_to :form
-  has_many :form_datas
+  has_many :form_datas, :dependent => :destroy
   has_many :forms, :through => :form_datas
 
   validates_presence_of :email
@@ -31,22 +31,23 @@ class FormDataSet < ActiveRecord::Base
     saved = self.save
 
     if saved
-      (fields || []).first.each do |f, v|
-        form_element = detect_form_element(f)
-        form_data = FormData.new(
-            :form_id => self.form_id,
-            :form_element_id => form_element.id,
-            :form_data_set_id => self.id)
+      (fields || []).each do |field_map|
+        field_map.each do |f, v|
+          form_element = detect_form_element(f)
+          form_data = FormData.new(
+              :form_id => self.form_id,
+              :form_element_id => form_element.id,
+              :form_data_set_id => self.id)
+          case form_element.field_type.downcase
+            when 'scale'
+            form_data.int_value = v.to_i
 
-        case form_element.field_type.downcase
-          when 'scale'
-          form_data.int_value = v.to_i
+            when 'text'
+            form_data.fat_value = v
+          end
 
-          when 'text'
-          form_data.fat_value = v
+          saved = form_data.save
         end
-
-        saved = form_data.save
       end
 
       return saved

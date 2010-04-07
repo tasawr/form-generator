@@ -7,7 +7,7 @@ class FormData < ActiveRecord::Base
     {:conditions => ['form_element_id IN (?)', ids]}
   }
 
-  COLORS = ['lightYellow', 'lightYellow', '#FFFF88', '#FFFF88']
+  COLORS = ['#CC0000', '#FF1A00', '#FF7400', '#C79810', '#73880A']
 
   serialize :hash_value
 
