@@ -13,6 +13,8 @@
       <div class='formData'>
         <div class='formDataHeader'>
           Email - <%= form_data_set.email %> | Submission date - <%= form_data_set.created_at %> |
+          <a href='javascript: void(0)'
+             onclick="var elTs = document.getElementById('formBox'); elTs.style.display = elTs.style.display == 'block' ? 'none' : 'block'">show / hide...</a> |
           <%= link_to 'delete', form_data_set_url(form_data_set.id),
                       :method => :delete, 
                       :confirm => 'Do you really want to remove this data set?' %>
@@ -25,33 +27,35 @@
              scale_types = FormDataSet::SCALE_TYPES.collect{|st| st.first}
              total_sum = 0
           %>
-          <% form_data_set.form.form_groups.each do |group| %>
-            <div class='formDataRows'>
-              <h4><%= group.label %></h4>
+          <div id='formBox' style="display: none">
+            <% form_data_set.form.form_groups.each do |group| %>
+              <div class='formDataRows'>
+                <h4><%= group.label %></h4>
 
-              <% total_points = 0 %>
-              <% group.form_elements.each do |element| %>
-                <% data = form_datum["f#{element.id}"] %>
-                <% if data %>
-                  <div class='reviewDataItem'>
-                    <% value = data.value(element.field_type) %>
-                    <% if element.field_type == FormElement::TYPE_SCALE%>
-                      <% total_points += value %>
-                      <div class='dataLabel'><%= element.label %>:</div>
-                      <div class='dataValue' style="color:<%= FormData::COLORS[value]%>"><%= scale_types[value] %></div>
-                    <% else %>
-                      <div class='dataLabel'><%= element.label %>:</div>
-                      <div class='dataValue'><%= value %></div>
-                    <% end %>
-                  </div>
+                <% total_points = 0 %>
+                <% group.form_elements.each do |element| %>
+                  <% data = form_datum["f#{element.id}"] %>
+                  <% if data %>
+                    <div class='reviewDataItem'>
+                      <% value = data.value(element.field_type) %>
+                      <% if element.field_type == FormElement::TYPE_SCALE%>
+                        <% total_points += value %>
+                        <div class='dataLabel'><%= element.label %>:</div>
+                        <div class='dataValue' style="color:<%= FormData::COLORS[value]%>"><%= scale_types[value] %></div>
+                      <% else %>
+                        <div class='dataLabel'><%= element.label %>:</div>
+                        <div class='dataValue'><%= value %></div>
+                      <% end %>
+                    </div>
+                  <% end %>
                 <% end %>
-              <% end %>
-              <div class='totalPoints'>
-                Total points - <%= total_points %>
-                <% total_sum += total_points %>
+                <div class='totalPoints'>
+                  Total points - <%= total_points %>
+                  <% total_sum += total_points %>
+                </div>
               </div>
-            </div>
-          <% end %>
+            <% end %>
+          </div>
           <div class='clear'></div>
           <div class='totalScores'>
             Total points - <%= total_sum %>
